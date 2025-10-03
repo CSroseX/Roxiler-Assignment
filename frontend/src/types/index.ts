@@ -14,6 +14,7 @@ export interface Store {
   email: string;
   address: string;
   ownerId: string;
+  avgRating?: number;
 }
 
 export interface Rating {

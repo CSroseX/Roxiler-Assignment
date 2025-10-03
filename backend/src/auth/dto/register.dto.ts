@@ -3,7 +3,7 @@ import { UserRole } from '../../entities/user.entity';
 
 export class RegisterDto {
   @IsString()
-  @MinLength(20)
+  @MinLength(3)
   @MaxLength(60)
   name: string;
 

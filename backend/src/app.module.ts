@@ -5,12 +5,14 @@ import { User } from './entities/user.entity';
 import { Store } from './entities/store.entity';
 import { Rating } from './entities/rating.entity';
 import { AuthModule } from './auth/auth.module';
+import { StoresModule } from './stores/stores.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(config),
     TypeOrmModule.forFeature([User, Store, Rating]),
     AuthModule,
+    StoresModule,
   ],
   controllers: [],
   providers: [],

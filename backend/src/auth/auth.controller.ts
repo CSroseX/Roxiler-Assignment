@@ -9,8 +9,10 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
+    console.log('Received registration request:', { ...registerDto, password: '[HIDDEN]' });
     const user = await this.authService.register(registerDto);
-    return { message: 'User registered successfully', userId: user.id };
+    console.log('User registered successfully:', { id: user.id, email: user.email });
+    return user;
   }
 
   @Post('login')
