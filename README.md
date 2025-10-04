@@ -8,6 +8,21 @@ Note: The task did not mention deploying the project on Vercel, Supabase, Render
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.1.3-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-8.11.0-blue)
 
+## 🚀 Deployment
+
+### Backend Deployment
+```bash
+cd backend
+npm run start:dev
+```
+
+### Frontend Deployment
+```bash
+cd frontend
+npm start
+# Deploy the 'build' folder to your hosting service
+```
+
 ## ✨ Features
 
 ### 🔐 Authentication & Authorization
@@ -217,114 +232,6 @@ REACT_APP_APP_NAME=Store Rating Platform
 - View system-wide analytics
 - Access admin dashboard
 
-## 🎨 Design System
 
-### Color Palette
-- **Primary**: Indigo (#6366f1) to Purple (#8b5cf6)
-- **Secondary**: Pink (#ec4899) to Rose (#f43f5e)
-- **Background**: Slate (#0f172a) to Purple (#581c87)
-- **Glass Effect**: White with 95% opacity and backdrop blur
 
-### Typography
-- **Headings**: Inter, bold weights
-- **Body**: Inter, regular weight
-- **Code**: JetBrains Mono
 
-### Animations
-- **Blob Animation**: Floating background elements
-- **Fade In**: Smooth content appearance
-- **Slide Up**: Page entrance animations
-- **Hover Effects**: Interactive feedback
-
-## 🧪 Testing
-
-### Backend Testing
-```bash
-cd backend
-npm run test          # Unit tests
-npm run test:e2e      # End-to-end tests
-npm run test:cov      # Coverage report
-```
-
-### Frontend Testing
-```bash
-cd frontend
-npm test              # Run tests
-npm run test:coverage # Coverage report
-```
-
-## 🚀 Deployment
-
-### Backend Deployment
-```bash
-cd backend
-npm run build
-npm run start:prod
-```
-
-### Frontend Deployment
-```bash
-cd frontend
-npm run build
-# Deploy the 'build' folder to your hosting service
-```
-
-### Docker Deployment
-```bash
-# Build and run with Docker Compose
-docker-compose up -d
-```
-
-## 📈 Performance Features
-
-- **Lazy Loading** - Components loaded on demand
-- **Code Splitting** - Optimized bundle sizes
-- **Image Optimization** - Compressed and responsive images
-- **Caching** - Intelligent data caching
-- **Database Indexing** - Optimized queries
-
-## 🔒 Security Features
-
-- **JWT Authentication** - Secure token-based auth
-- **Password Hashing** - bcrypt with salt rounds
-- **Input Validation** - Server-side validation
-- **SQL Injection Prevention** - TypeORM protection
-- **CORS Configuration** - Cross-origin security
-- **Rate Limiting** - API abuse prevention
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Authors
-
-- **Your Name** - *Initial work* - [GitHub](https://github.com/yourusername)
-
-## 🙏 Acknowledgments
-
-- NestJS team for the amazing framework
-- React team for the powerful UI library
-- Tailwind CSS for the utility-first approach
-- All contributors and testers
-
-## 📞 Support
-
-If you have any questions or need help, please:
-- Open an issue on GitHub
-- Contact us at support@storerating.com
-- Check our [documentation](https://docs.storerating.com)
-
----
-
-<div align="center">
-  <p>Made with ❤️ by the Store Rating Platform Team</p>
-  <p>⭐ Star this repository if you found it helpful!</p>
-</div>
