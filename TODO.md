@@ -1,5 +1,10 @@
-# TODO: Revert Supabase Migration and Connect to PostgreSQL
+# Navbar Implementation for Dashboards
 
-- [x] Edit backend/src/config/ormconfig.ts to disable SSL by setting ssl: false
-- [x] Run backend to test database connection
-- [x] Verify backend starts without SSL errors
+## Tasks
+- [ ] Modify Navbar.tsx to include profile icon with dropdown menu (Edit details, Change password, Logout)
+- [ ] Add state management for dropdown visibility
+- [ ] Integrate EditProfileModal and ChangePasswordModal into Navbar
+- [ ] Update AdminDashboard.tsx to use Navbar component
+- [ ] Update StoreOwnerDashboard.tsx to use Navbar component
+- [ ] Update UserDashboard.tsx to use Navbar component
+- [ ] Test all functionalities: Edit details, Change password, Logout on all dashboards

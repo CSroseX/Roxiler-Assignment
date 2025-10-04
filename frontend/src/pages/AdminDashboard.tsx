@@ -8,7 +8,7 @@ import { userService } from '../services/user.service';
 import { storeService } from '../services/store.service';
 import { adminService } from '../services/admin.service';
 import { User, Store } from '../types';
-import PageLayout from '../components/layout/PageLayout';
+import Navbar from '../components/layout/Navbar';
 import { LoadingSpinner, Alert } from '../components/common/UIComponents';
 
 interface DashboardStats {
@@ -108,13 +108,16 @@ const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
+
+      {/* Navbar */}
+      <Navbar />
 
       <style>{`
         @keyframes blob {
@@ -211,7 +214,7 @@ const AdminDashboard: React.FC = () => {
         }
       `}</style>
 
-      <div className="max-w-7xl w-full space-y-8 relative z-10 animate-slide-up">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 relative z-10 animate-slide-up">
         {/* Header */}
         <div className="text-center">
           <div className="mx-auto w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 shadow-lg transform hover:scale-110 transition-transform duration-300">
