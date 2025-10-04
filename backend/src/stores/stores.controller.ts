@@ -10,6 +10,7 @@ import {
   UseGuards,
   ParseUUIDPipe,
   ForbiddenException,
+  Query,
 } from '@nestjs/common';
 import { StoresService } from './stores.service';
 import { CreateStoreDto } from './dto/create-store.dto';
@@ -25,9 +26,17 @@ export class StoresController {
   constructor(private readonly storesService: StoresService) {}
 
   @Get()
-  async getAll() {
-    // Return all stores regardless of user role
-    return this.storesService.findAll();
+  async getAll(
+    @Query('search') search?: string,
+    @Query('page') page = '1',
+    @Query('limit') limit = '10',
+    @Query('sortBy') sortBy = 'name',
+    @Query('sortOrder') sortOrder = 'ASC',
+  ) {
+    const pageNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
+    const sortOrderUpper = sortOrder.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+    return this.storesService.findAll(search, pageNum, limitNum, sortBy, sortOrderUpper as 'ASC' | 'DESC');
   }
 
   @UseGuards(AuthGuard('jwt'))

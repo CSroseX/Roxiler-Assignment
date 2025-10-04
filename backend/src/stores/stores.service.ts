@@ -15,9 +15,14 @@ export class StoresService {
     private ratingsRepo: Repository<Rating>,
   ) {}
 
-  async findAll(): Promise<Store[]> {
-    // Return stores with an aggregated avgRating and ratingsCount fields
-    const raws = await this.storesRepo
+  async findAll(
+    search?: string,
+    page: number = 1,
+    limit: number = 10,
+    sortBy: string = 'name',
+    sortOrder: 'ASC' | 'DESC' = 'ASC',
+  ): Promise<{ data: any[]; total: number; page: number; limit: number }> {
+    const query = this.storesRepo
       .createQueryBuilder('store')
       .leftJoin('store.ratings', 'rating')
       .select([
@@ -31,10 +36,22 @@ export class StoresService {
         'COALESCE(AVG(rating.rating), 0) AS "avgRating"',
         'COUNT(rating.id) AS "ratingsCount"',
       ])
-      .groupBy('store.id')
-      .getRawMany();
+      .groupBy('store.id');
 
-    return raws.map((r: any) => ({
+    if (search) {
+      query.andWhere('(store.name ILIKE :search OR store.address ILIKE :search)', {
+        search: `%${search}%`,
+      });
+    }
+
+    const offset = (page - 1) * limit;
+    query.orderBy(`store.${sortBy}`, sortOrder).offset(offset).limit(limit);
+
+    const raws = await query.getRawMany();
+
+    const total = await query.getCount();
+
+    const data = raws.map((r: any) => ({
       id: r.id,
       name: r.name,
       email: r.email,
@@ -45,6 +62,8 @@ export class StoresService {
       avgRating: parseFloat(r.avgRating),
       ratingsCount: parseInt(r.ratingsCount) || 0,
     } as any));
+
+    return { data, total, page, limit };
   }
 
   async findAllByUser(userId: string): Promise<Store[]> {

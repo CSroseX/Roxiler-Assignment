@@ -27,4 +27,27 @@ export class AdminService {
   async getAllUsers() {
     return this.userRepo.find({ where: { role: UserRole.USER } });
   }
+
+  async updateUser(id: string, updateData: Partial<User>): Promise<User> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    Object.assign(user, updateData);
+    return this.userRepo.save(user);
+  }
+
+  async createStore(dto: { name: string; email: string; address: string }): Promise<Store> {
+    const store = this.storeRepo.create(dto);
+    return this.storeRepo.save(store);
+  }
+
+  async updateStore(id: string, updateData: Partial<Store>): Promise<Store> {
+    const store = await this.storeRepo.findOne({ where: { id } });
+    if (!store) {
+      throw new Error('Store not found');
+    }
+    Object.assign(store, updateData);
+    return this.storeRepo.save(store);
+  }
 }

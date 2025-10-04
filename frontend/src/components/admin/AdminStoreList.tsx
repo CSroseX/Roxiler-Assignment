@@ -123,7 +123,9 @@ const AdminStoreList: React.FC<AdminStoreListProps> = ({
                   {store.email}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {store.address}
+                  <div className="max-w-xs overflow-hidden overflow-ellipsis whitespace-nowrap" title={store.address}>
+                    {store.address}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {store.avgRating ? store.avgRating.toFixed(1) : 'N/A'} ({store.ratingsCount || 0})

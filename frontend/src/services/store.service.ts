@@ -4,7 +4,7 @@ import { Store } from '../types';
 export const storeService = {
   getStores: async () => {
     const response = await api.get('/stores');
-    return response.data;
+    return response.data.data;
   },
 
   getStoreById: async (id: string) => {

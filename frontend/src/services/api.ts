@@ -40,32 +40,32 @@ export const authService = {
   }) => {
     try {
       console.log('Making registration request to:', `${API_URL}/auth/register`);
-      console.log('With data:', { 
-        ...userData, 
+      console.log('With data:', {
+        ...userData,
         password: '********',
         headers: api.defaults.headers
       });
-      
+
       const response = await api.post('/auth/register', userData, {
         headers: {
           'Content-Type': 'application/json',
         }
       });
-      
+
       console.log('Registration response status:', response.status);
       console.log('Registration response data:', response.data);
-      
+
       if (!response.data) {
         throw new Error('No data received from server');
       }
-      
+
       return response.data;
     } catch (error) {
       console.error('Registration request failed:', error);
       if (error instanceof AxiosError) {
         console.error('Full error response:', error.response);
-        const errorMessage = error.response?.data?.message || 
-                          error.response?.data?.error || 
+        const errorMessage = error.response?.data?.message ||
+                          error.response?.data?.error ||
                           error.message;
         console.error('Server error:', errorMessage);
         throw new Error(errorMessage || 'Registration failed. Please try again.');
@@ -73,6 +73,19 @@ export const authService = {
         console.error('Unexpected error:', error);
         throw new Error('An unexpected error occurred during registration.');
       }
+    }
+  },
+  changePassword: async (changePasswordData: { oldPassword: string; newPassword: string }) => {
+    try {
+      const response = await api.post('/auth/change-password', changePasswordData);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error('Change password error:', error.response?.data || error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+      throw error;
     }
   },
 };

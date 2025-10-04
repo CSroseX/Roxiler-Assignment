@@ -12,7 +12,13 @@ export class UsersService {
     private usersRepo: Repository<User>,
   ) {}
 
-  async findAll(filters?: { name?: string; email?: string; address?: string; role?: string }): Promise<User[]> {
+  async findAll(
+    filters?: { name?: string; email?: string; address?: string; role?: string },
+    page?: number,
+    limit?: number,
+    sortBy?: string,
+    sortOrder?: 'ASC' | 'DESC'
+  ): Promise<User[]> {
     const query = this.usersRepo.createQueryBuilder('user');
 
     if (filters?.name) {
@@ -26,6 +32,14 @@ export class UsersService {
     }
     if (filters?.role) {
       query.andWhere('user.role = :role', { role: filters.role });
+    }
+
+    if (sortBy) {
+      query.orderBy(`user.${sortBy}`, sortOrder || 'ASC');
+    }
+
+    if (page && limit) {
+      query.skip((page - 1) * limit).take(limit);
     }
 
     return query.getMany();

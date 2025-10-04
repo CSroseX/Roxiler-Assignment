@@ -33,9 +33,16 @@ export class UsersController {
     @Query('email') email?: string,
     @Query('address') address?: string,
     @Query('role') role?: string,
+    @Query('page') page = '1',
+    @Query('limit') limit = '10',
+    @Query('sortBy') sortBy = 'name',
+    @Query('sortOrder') sortOrder = 'ASC',
   ) {
     const filters = { name, email, address, role };
-    return this.usersService.findAll(filters);
+    const pageNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
+    const sortOrderEnum = sortOrder === 'DESC' ? 'DESC' as const : 'ASC' as const;
+    return this.usersService.findAll(filters, pageNum, limitNum, sortBy, sortOrderEnum);
   }
 
   @Get(':id')
