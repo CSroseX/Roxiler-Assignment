@@ -13,7 +13,7 @@ Note: The task did not mention deploying the project on Vercel, Supabase, Render
 ### Backend Deployment
 ```bash
 cd backend
-npm run run:start
+npm run start:dev
 ```
 
 ### Frontend Deployment
