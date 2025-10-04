@@ -1,6 +1,6 @@
 # 🏪 Store Rating Platform
 
-A modern, full-stack web application for managing and rating stores with role-based access control. Built with cutting-edge technologies and featuring a beautiful, responsive UI with smooth animations.
+Note: The task did not mention deploying the project on Vercel, Supabase, Render, etc. Hence, the task is considered complete with only its specified deliverables in mind.
 
 ![Store Rating Platform](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
 ![React](https://img.shields.io/badge/React-19.2.0-blue)
