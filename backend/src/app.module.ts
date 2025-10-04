@@ -6,6 +6,8 @@ import { Store } from './entities/store.entity';
 import { Rating } from './entities/rating.entity';
 import { AuthModule } from './auth/auth.module';
 import { StoresModule } from './stores/stores.module';
+import { UsersModule } from './users/users.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { StoresModule } from './stores/stores.module';
     TypeOrmModule.forFeature([User, Store, Rating]),
     AuthModule,
     StoresModule,
+    UsersModule,
+    AdminModule,
   ],
   controllers: [],
   providers: [],

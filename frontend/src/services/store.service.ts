@@ -35,4 +35,20 @@ export const storeService = {
     const response = await api.post(`/stores/${storeId}/rate`, { rating });
     return response.data;
   },
+
+  getMyRatings: async () => {
+    const response = await api.get('/stores/ratings/my');
+    return response.data;
+  },
+
+  // Admin methods
+  getAdminStores: async () => {
+    const response = await api.get('/admin/stores');
+    return response.data;
+  },
+
+  createAdminStore: async (storeData: Omit<Store, 'id' | 'ownerId'>) => {
+    const response = await api.post('/admin/stores', storeData);
+    return response.data;
+  },
 };

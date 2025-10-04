@@ -12,7 +12,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   allowedRoles,
 }) => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading indicator while auth state is loading
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

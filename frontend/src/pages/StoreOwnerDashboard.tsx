@@ -22,7 +22,11 @@ const StoreOwnerDashboard: React.FC = () => {
     try {
       setIsLoading(true);
       const data = await storeService.getStores();
-      setStores(data);
+      // Filter stores: show all for admin, only owned for store_owner
+      const filteredStores = data.filter((store: Store) =>
+        user?.role === 'admin' || store.ownerId === user?.id
+      );
+      setStores(filteredStores);
       setError(null);
     } catch (err) {
       setError('Failed to load stores');
@@ -113,6 +117,35 @@ const StoreOwnerDashboard: React.FC = () => {
               </svg>
               {showForm ? 'Cancel' : 'Add Store'}
             </button>
+          </div>
+        </div>
+        {/* Analytics Section */}
+        <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {/* Your Ratings */}
+          <div className="bg-white shadow rounded-xl p-6 flex flex-col items-start">
+            <h3 className="text-sm font-medium text-gray-500">Your Ratings</h3>
+            <p className="mt-2 text-2xl font-semibold text-gray-900">
+              {stores.length > 0 ? (stores.reduce((acc, s) => acc + (s.avgRating || 0), 0) / stores.length).toFixed(1) : 'N/A'}
+              <span className="text-gray-400 text-base ml-1">/5</span>
+            </p>
+          </div>
+
+          {/* Performance */}
+          <div className="bg-white shadow rounded-xl p-6 flex flex-col items-start">
+            <h3 className="text-sm font-medium text-gray-500">Performance</h3>
+            <p className="mt-2 text-2xl font-semibold text-gray-900">
+              {stores.length} {stores.length === 1 ? 'Store' : 'Stores'}
+            </p>
+            <p className="text-sm text-gray-400 mt-1">You are managing all your stores efficiently</p>
+          </div>
+
+          {/* Total Reviews */}
+          <div className="bg-white shadow rounded-xl p-6 flex flex-col items-start">
+            <h3 className="text-sm font-medium text-gray-500">Total Reviews</h3>
+            <p className="mt-2 text-2xl font-semibold text-gray-900">
+              {stores.reduce((acc, s) => acc + (s.ratingsCount || 0), 0)}
+            </p>
+            <p className="text-sm text-gray-400 mt-1">Customer feedback collected</p>
           </div>
         </div>
 

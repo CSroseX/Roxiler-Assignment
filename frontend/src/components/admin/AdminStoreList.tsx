@@ -1,21 +1,21 @@
 import React, { useState, useMemo } from 'react';
-import { User } from '../../types';
+import { Store } from '../../types';
 
-interface UserListProps {
-  users: User[];
-  onEditUser: (user: User) => void;
-  onDeleteUser: (userId: string) => void;
-  onFilterChange?: (filters: { name?: string; email?: string; address?: string; role?: string }) => void;
+interface AdminStoreListProps {
+  stores: Store[];
+  onEdit: (store: Store) => void;
+  onDelete: (storeId: string) => void;
+  onFilterChange?: (filters: { name?: string; email?: string; address?: string }) => void;
 }
 
-const UserList: React.FC<UserListProps> = ({
-  users,
-  onEditUser,
-  onDeleteUser,
+const AdminStoreList: React.FC<AdminStoreListProps> = ({
+  stores,
+  onEdit,
+  onDelete,
   onFilterChange,
 }) => {
-  const [filters, setFilters] = useState({ name: '', email: '', address: '', role: '' });
-  const [sortField, setSortField] = useState<keyof User>('name');
+  const [filters, setFilters] = useState({ name: '', email: '', address: '' });
+  const [sortField, setSortField] = useState<keyof Store>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   const handleFilterChange = (field: string, value: string) => {
@@ -24,7 +24,7 @@ const UserList: React.FC<UserListProps> = ({
     onFilterChange?.(newFilters);
   };
 
-  const handleSort = (field: keyof User) => {
+  const handleSort = (field: keyof Store) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
@@ -33,13 +33,12 @@ const UserList: React.FC<UserListProps> = ({
     }
   };
 
-  const filteredAndSortedUsers = useMemo(() => {
-    let filtered = users.filter(user => {
+  const filteredAndSortedStores = useMemo(() => {
+    let filtered = stores.filter(store => {
       return (
-        user.name.toLowerCase().includes(filters.name.toLowerCase()) &&
-        user.email.toLowerCase().includes(filters.email.toLowerCase()) &&
-        user.address.toLowerCase().includes(filters.address.toLowerCase()) &&
-        (filters.role === '' || user.role === filters.role)
+        store.name.toLowerCase().includes(filters.name.toLowerCase()) &&
+        store.email.toLowerCase().includes(filters.email.toLowerCase()) &&
+        store.address.toLowerCase().includes(filters.address.toLowerCase())
       );
     });
 
@@ -52,12 +51,12 @@ const UserList: React.FC<UserListProps> = ({
     });
 
     return filtered;
-  }, [users, filters, sortField, sortDirection]);
+  }, [stores, filters, sortField, sortDirection]);
 
   return (
     <div>
       {/* Filters */}
-      <div className="mb-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
         <input
           type="text"
           placeholder="Filter by name"
@@ -79,16 +78,6 @@ const UserList: React.FC<UserListProps> = ({
           onChange={(e) => handleFilterChange('address', e.target.value)}
           className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
-        <select
-          value={filters.role}
-          onChange={(e) => handleFilterChange('role', e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-          <option value="">All roles</option>
-          <option value="admin">Admin</option>
-          <option value="store_owner">Store Owner</option>
-          <option value="user">User</option>
-        </select>
       </div>
 
       <div className="overflow-x-auto">
@@ -112,9 +101,12 @@ const UserList: React.FC<UserListProps> = ({
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSort('role')}
+                onClick={() => handleSort('address')}
               >
-                Role {sortField === 'role' && (sortDirection === 'asc' ? '↑' : '↓')}
+                Address {sortField === 'address' && (sortDirection === 'asc' ? '↑' : '↓')}
+              </th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Rating
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
@@ -122,31 +114,29 @@ const UserList: React.FC<UserListProps> = ({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredAndSortedUsers.map((user) => (
-              <tr key={user.id}>
+            {filteredAndSortedStores.map((store) => (
+              <tr key={store.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {user.name}
+                  {store.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {user.email}
+                  {store.email}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                    ${user.role === 'admin' ? 'bg-red-100 text-red-800' :
-                      user.role === 'store_owner' ? 'bg-green-100 text-green-800' :
-                      'bg-blue-100 text-blue-800'}`}>
-                    {user.role}
-                  </span>
+                  {store.address}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {store.avgRating ? store.avgRating.toFixed(1) : 'N/A'} ({store.ratingsCount || 0})
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button
-                    onClick={() => onEditUser(user)}
+                    onClick={() => onEdit(store)}
                     className="text-indigo-600 hover:text-indigo-900 mr-4"
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => onDeleteUser(user.id)}
+                    onClick={() => onDelete(store.id)}
                     className="text-red-600 hover:text-red-900"
                   >
                     Delete
@@ -161,4 +151,4 @@ const UserList: React.FC<UserListProps> = ({
   );
 };
 
-export default UserList;
+export default AdminStoreList;

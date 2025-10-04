@@ -25,6 +25,8 @@ export interface Store {
   ownerId: string;
   owner?: User;
   ratings?: Rating[];
+  avgRating?: number;
+  ratingsCount?: number;
   createdAt: Date;
   updatedAt: Date;
 }

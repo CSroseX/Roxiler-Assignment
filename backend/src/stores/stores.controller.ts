@@ -26,7 +26,15 @@ export class StoresController {
 
   @Get()
   async getAll() {
+    // Return all stores regardless of user role
     return this.storesService.findAll();
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('ratings/my')
+  async getMyRatings(@Req() req: any) {
+    const userId = req.user?.id;
+    return this.storesService.getUserRatings(userId);
   }
 
   @Get(':id')
@@ -34,19 +42,17 @@ export class StoresController {
     return this.storesService.findOne(id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Post()
-  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRole.STORE_OWNER, UserRole.ADMIN)
+  @Post()
   async create(@Req() req: any, @Body() dto: CreateStoreDto) {
     const ownerId = req.user?.id;
     return this.storesService.create(ownerId, dto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Put(':id')
-  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRole.STORE_OWNER, UserRole.ADMIN)
+  @Put(':id')
   async update(@Req() req: any, @Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateStoreDto) {
     // only owner or admin can update
     const store = await this.storesService.findOne(id as string);
@@ -58,10 +64,9 @@ export class StoresController {
     return this.storesService.update(id, dto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Delete(':id')
-  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRole.STORE_OWNER, UserRole.ADMIN)
+  @Delete(':id')
   async remove(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
     const store = await this.storesService.findOne(id as string);
     const requesterId = req.user?.id;
@@ -78,5 +83,20 @@ export class StoresController {
   async rate(@Req() req: any, @Param('id', ParseUUIDPipe) id: string, @Body() dto: RateStoreDto) {
     const userId = req.user?.id;
     return this.storesService.rateStore(userId, id, dto.rating);
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Get('/admin/stores')
+  async getAllForAdmin() {
+    return this.storesService.findAll();
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Post('/admin/stores')
+  async createForAdmin(@Body() dto: CreateStoreDto) {
+    // For admin, ownerId can be null or specified, but for now, assume admin creates without owner
+    return this.storesService.create(null, dto);
   }
 }

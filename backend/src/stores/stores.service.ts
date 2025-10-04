@@ -16,7 +16,7 @@ export class StoresService {
   ) {}
 
   async findAll(): Promise<Store[]> {
-    // Return stores with an aggregated avgRating field
+    // Return stores with an aggregated avgRating and ratingsCount fields
     const raws = await this.storesRepo
       .createQueryBuilder('store')
       .leftJoin('store.ratings', 'rating')
@@ -29,6 +29,7 @@ export class StoresService {
         'store."createdAt" AS "createdAt"',
         'store."updatedAt" AS "updatedAt"',
         'COALESCE(AVG(rating.rating), 0) AS "avgRating"',
+        'COUNT(rating.id) AS "ratingsCount"',
       ])
       .groupBy('store.id')
       .getRawMany();
@@ -42,6 +43,40 @@ export class StoresService {
       createdAt: r.createdAt,
       updatedAt: r.updatedAt,
       avgRating: parseFloat(r.avgRating),
+      ratingsCount: parseInt(r.ratingsCount) || 0,
+    } as any));
+  }
+
+  async findAllByUser(userId: string): Promise<Store[]> {
+    // Return stores owned by the user with aggregated avgRating and ratingsCount
+    const raws = await this.storesRepo
+      .createQueryBuilder('store')
+      .leftJoin('store.ratings', 'rating')
+      .where('store.ownerId = :userId', { userId })
+      .select([
+        'store.id AS id',
+        'store.name AS name',
+        'store.email AS email',
+        'store.address AS address',
+        'store.ownerId AS "ownerId"',
+        'store."createdAt" AS "createdAt"',
+        'store."updatedAt" AS "updatedAt"',
+        'COALESCE(AVG(rating.rating), 0) AS "avgRating"',
+        'COUNT(rating.id) AS "ratingsCount"',
+      ])
+      .groupBy('store.id')
+      .getRawMany();
+
+    return raws.map((r: any) => ({
+      id: r.id,
+      name: r.name,
+      email: r.email,
+      address: r.address,
+      ownerId: r.ownerId,
+      createdAt: r.createdAt,
+      updatedAt: r.updatedAt,
+      avgRating: parseFloat(r.avgRating),
+      ratingsCount: parseInt(r.ratingsCount) || 0,
     } as any));
   }
 
@@ -96,5 +131,13 @@ export class StoresService {
       }
       throw err;
     }
+  }
+
+  async getUserRatings(userId: string): Promise<{ storeId: string; rating: number }[]> {
+    const ratings = await this.ratingsRepo.find({
+      where: { userId },
+      select: ['storeId', 'rating'],
+    });
+    return ratings.map(r => ({ storeId: r.storeId, rating: r.rating }));
   }
 }

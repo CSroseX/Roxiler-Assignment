@@ -15,6 +15,7 @@ export interface Store {
   address: string;
   ownerId: string;
   avgRating?: number;
+  ratingsCount?: number;
 }
 
 export interface Rating {
